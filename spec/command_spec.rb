@@ -5,7 +5,7 @@ describe SolidUseCase::Command do
   describe 'Stepping' do
     class TestA < SolidUseCase::Command
       def run(inputs)
-        execute do
+        attempt_all do
           step { step_1(inputs) }
           step {|inputs| step_2(inputs) }
         end

@@ -11,10 +11,6 @@ module SolidUseCase
     # Monad-related #
     # # # # # # # # #
 
-    def execute(&block)
-      attempt_all(self, &block)
-    end
-
     def fail(type, data={})
       data[:type] = type
       Failure(ErrorStruct.new(data))

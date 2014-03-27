@@ -1,5 +1,5 @@
 require 'solid_use_case'
-require 'solid_use_case/rspec'
+require 'solid_use_case/rspec_matchers'
 
 RSpec.configure do |config|
   config.include(SolidUseCase::RSpecMatchers)

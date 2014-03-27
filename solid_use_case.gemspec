@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'solid_use_case/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "Solid Use Case"
+  spec.name          = "solid_use_case"
   spec.version       = SolidUseCase::VERSION
   spec.authors       = ["Gilbert"]
   spec.email         = ["gilbertbgarza@gmail.com"]

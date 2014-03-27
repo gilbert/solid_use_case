@@ -1,6 +1,6 @@
 module SolidUseCase
   class Command
-    include Deterministic::Helpers
+    include Deterministic::CoreExt::Either
     include CommandUtil
 
     def self.run(input_hash={})

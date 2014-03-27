@@ -1,5 +1,5 @@
-# Directly include deterministic source until updated version gets published
-require_relative '../vendor/deterministic'
+require "deterministic"
+require "deterministic/core_ext/either"
 
 require "solid_use_case/version"
 require 'solid_use_case/command/util.rb'

@@ -6,7 +6,7 @@
 
 Add this line to your application's Gemfile:
 
-    gem 'solid_use_case', '~> 1.0.0'
+    gem 'solid_use_case', '~> 1.0.1'
 
 And then execute:
 

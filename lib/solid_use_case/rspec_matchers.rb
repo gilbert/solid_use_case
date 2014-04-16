@@ -16,7 +16,19 @@ module SolidUseCase
       end
 
       def failure_message_for_should
-        "expected result to be a success\nError & Data:\n    #{@result.value.type} - #{@result.value.inspect}"
+        "expected result to be a success\n" +
+        if @result.value.is_a? SolidUseCase::ErrorStruct
+          "Error & Data:\n    #{@result.value.type} - #{@result.value.inspect}"
+        elsif @result.value.is_a? Exception
+          backtrace = @result.value.backtrace.reject do |file|
+            file =~ %r{deterministic/either/attempt_all.rb|deterministic/core_ext/either.rb}
+          end.take_while do |file|
+            file.match(%r{rspec-core-[^/]+/lib/rspec/core/example\.rb}).nil?
+          end
+          "Raised Error:\n    #{@result.value.message}\n\t#{backtrace.join "\n\t"}"
+        else
+          "Error: #{@result.value.inspect}"
+        end
       end
 
       def failure_message_for_should_not

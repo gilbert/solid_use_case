@@ -36,11 +36,11 @@ class UserSignup < SolidUseCase::Command
 
   def validate(params)
     user = User.new(params[:user])
-    if user.valid?
+    if !user.valid?
       fail :invalid_user, :user => user
     else
       params[:user] = user
-      Success(params)
+      next_step(params)
     end
   end
 
@@ -49,13 +49,13 @@ class UserSignup < SolidUseCase::Command
     if user.save
       fail :user_save_failed, :user => user
     else
-      Success(params)
+      next_step(params)
     end
   end
 
   def email_user(params)
     UserMailer.async.deliver(:welcome, params[:user].id)
-    Success(params[:user])
+    return params[:user]
   end
 end
 ```

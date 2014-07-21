@@ -3,19 +3,19 @@ require 'spec_helper'
 describe 'Custom RSpec Matchers' do
   include SolidUseCase::RSpecMatchers
 
-  class FailCase < SolidUseCase::Command
+  class FailCase < SolidUseCase::Base
     def run(error)
       fail(error)
     end
   end
 
-  class SuccessCase < SolidUseCase::Command
+  class SuccessCase < SolidUseCase::Base
     def run(val)
       succeed(val)
     end
   end
 
-  class ExceptionCase < SolidUseCase::Command
+  class ExceptionCase < SolidUseCase::Base
     def run(val)
       attempt_all do
         try { raise_exception }

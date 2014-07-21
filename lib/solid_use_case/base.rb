@@ -1,7 +1,7 @@
 module SolidUseCase
-  class Command
+  class Base
     include Deterministic::CoreExt::Either
-    include CommandUtil
+    include BaseUtil
 
     def self.run(input_hash={})
       self.new.run(input_hash)

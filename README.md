@@ -25,7 +25,7 @@ The only required method is the `#run` method.
 ### Rails Example
 
 ```ruby
-class UserSignup < SolidUseCase::Command
+class UserSignup < SolidUseCase::Base
   def run(params)
     attempt_all do
       step { validate(params) }

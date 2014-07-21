@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe SolidUseCase::Command do
+describe SolidUseCase::Base do
 
   describe 'Stepping' do
-    class GiantSteps < SolidUseCase::Command
+    class GiantSteps < SolidUseCase::Base
       def run(inputs)
         attempt_all do
           step { step_1(inputs) }
@@ -31,7 +31,7 @@ describe SolidUseCase::Command do
 
 
   describe 'Failure Matching' do
-    class FailureMatch < SolidUseCase::Command
+    class FailureMatch < SolidUseCase::Base
       def run(inputs)
         attempt_all do
           step { fail_it(inputs) }

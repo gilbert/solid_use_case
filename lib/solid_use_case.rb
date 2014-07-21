@@ -2,9 +2,9 @@ require "deterministic"
 require "deterministic/core_ext/either"
 
 require "solid_use_case/version"
-require 'solid_use_case/command/util.rb'
-require 'solid_use_case/command/error_struct.rb'
-require 'solid_use_case/command.rb'
+require 'solid_use_case/base/util.rb'
+require 'solid_use_case/base/error_struct.rb'
+require 'solid_use_case/base.rb'
 
 module SolidUseCase
 end

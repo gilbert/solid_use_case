@@ -30,6 +30,37 @@ describe SolidUseCase::Base do
   end
 
 
+  describe 'Stepping DSL' do
+    class GiantStepsDSL < SolidUseCase::Base
+
+      steps :step_1, :step_2
+
+      def step_1(inputs)
+        inputs[:number] += 10
+        continue(inputs)
+      end
+
+      def step_2(inputs)
+        inputs[:number] *= 2
+        continue(inputs)
+      end
+    end
+
+    it "pipes one step result to the next step" do
+      result = GiantStepsDSL.run(:number => 10)
+      expect(result).to be_a_success
+      expect(result.value[:number]).to eq(40)
+    end
+
+    it "can run multiple times" do
+      result = GiantStepsDSL.run(:number => 10)
+      result = GiantStepsDSL.run(:number => 10)
+      expect(result).to be_a_success
+      expect(result.value[:number]).to eq(40)
+    end
+  end
+
+
   describe 'Failure Matching' do
     class FailureMatch < SolidUseCase::Base
       def run(inputs)

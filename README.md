@@ -26,13 +26,8 @@ The only required method is the `#run` method.
 
 ```ruby
 class UserSignup < SolidUseCase::Base
-  def run(params)
-    attempt_all do
-      step { validate(params) }
-      step {|params| save_user(params) }
-      step {|params| email_user(params) }
-    end
-  end
+
+  steps :validate, :save_user, :email_user
 
   def validate(params)
     user = User.new(params[:user])

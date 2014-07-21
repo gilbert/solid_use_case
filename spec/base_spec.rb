@@ -13,12 +13,12 @@ describe SolidUseCase::Base do
 
       def step_1(inputs)
         inputs[:number] += 10
-        next_step(inputs)
+        continue(inputs)
       end
 
       def step_2(inputs)
         inputs[:number] *= 2
-        succeed(inputs)
+        continue(inputs)
       end
     end
 

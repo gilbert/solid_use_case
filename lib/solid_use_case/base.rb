@@ -16,7 +16,6 @@ module SolidUseCase
       Failure(ErrorStruct.new(data))
     end
 
-    alias :next_step :Success
-    alias :succeed :Success
+    alias :continue :Success
   end
 end

@@ -11,7 +11,7 @@ describe 'Custom RSpec Matchers' do
 
   class SuccessCase < SolidUseCase::Base
     def run(val)
-      succeed(val)
+      continue(val)
     end
   end
 

@@ -30,7 +30,7 @@ class UserSignup < SolidUseCase::Base
     attempt_all do
       step { validate(params) }
       step {|params| save_user(params) }
-      try {|params| email_user(params) }
+      step {|params| email_user(params) }
     end
   end
 
@@ -40,7 +40,7 @@ class UserSignup < SolidUseCase::Base
       fail :invalid_user, :user => user
     else
       params[:user] = user
-      next_step(params)
+      continue(params)
     end
   end
 
@@ -49,13 +49,14 @@ class UserSignup < SolidUseCase::Base
     if user.save
       fail :user_save_failed, :user => user
     else
-      next_step(params)
+      continue(params)
     end
   end
 
   def email_user(params)
     UserMailer.async.deliver(:welcome, params[:user].id)
-    return params[:user]
+    # Because this is the last step, we want to end with the created user
+    continue(params[:user])
   end
 end
 ```
@@ -72,15 +73,15 @@ class UsersController < ApplicationController
       end
 
       failure(:invalid_user) do |error_data|
-        render_new(error_data, "Oops, fix your mistakes and try again")
+        render_form_errors(error_data, "Oops, fix your mistakes and try again")
       end
 
       failure(:user_save_failed) do |error_data|
-        render_new(error_data, "Sorry, something went wrong on our side.")
+        render_form_errors(error_data, "Sorry, something went wrong on our side.")
       end
 
       failure do |exception|
-        flash[:error] = "Something went terribly wrong"
+        flash[:error] = "something went terribly wrong"
         render 'new'
       end
     end
@@ -88,7 +89,7 @@ class UsersController < ApplicationController
 
   private
 
-  def render_new(user, error_message)
+  def render_form_errors(user, error_message)
     @user = user
     @error_message = error_message
     render 'new'

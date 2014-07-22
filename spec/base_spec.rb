@@ -58,6 +58,21 @@ describe SolidUseCase::Base do
       expect(result).to be_a_success
       expect(result.value[:number]).to eq(40)
     end
+
+    class SubStep < SolidUseCase::Base
+      steps GiantStepsDSL, :last_step
+
+      def last_step(inputs)
+        inputs[:number] += 1
+        continue(inputs[:number])
+      end
+    end
+
+    it "pipes one step result to the next step" do
+      result = SubStep.run(:number => 10)
+      expect(result).to be_a_success
+      expect(result.value).to eq(41)
+    end
   end
 
 

@@ -18,8 +18,19 @@ module SolidUseCase
       return result unless steps
 
       while steps.count > 0
-        result = result.and self.send(steps.shift, result.value)
+        next_step = steps.shift
+
+        if next_step.is_a?(Class) && (next_step < SolidUseCase::Base)
+          subresult = next_step.run(result.value)
+        elsif next_step.is_a?(Symbol)
+          subresult = self.send(next_step, result.value)
+        else
+          raise "Invalid step type: #{next_step.inspect}"
+        end
+
+        result = result.and(subresult)
       end
+
       result
     end
 

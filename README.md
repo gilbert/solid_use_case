@@ -20,12 +20,13 @@ Or install it yourself as:
 
 At its core, this library is a light wrapper around [Deterministic](https://github.com/pzol/deterministic), a practical abstraction over the Either monad. Don't let that scare you - you don't have to understand monad theory to reap its benefits.
 
-The only required method is the `#run` method.
+The only thing required is using the `#steps` method:
 
 ### Rails Example
 
 ```ruby
-class UserSignup < SolidUseCase::Base
+class UserSignup
+  include SolidUseCase::Composable
 
   steps :validate, :save_user, :email_user
 
@@ -88,6 +89,45 @@ class UsersController < ApplicationController
     @user = user
     @error_message = error_message
     render 'new'
+  end
+end
+```
+
+## RSpec Matchers
+
+If you're using RSpec, Solid Use Case provides some helpful matchers for testing.
+
+First you mix them them into RSpec:
+
+```ruby
+# In your spec_helper.rb
+require 'solid_use_case'
+require 'solid_use_case/rspec_matchers'
+
+RSpec.configure do |config|
+  config.include(SolidUseCase::RSpecMatchers)
+end
+```
+
+And then you can use the matchers, with helpful error messages:
+
+```ruby
+describe MyApp::SignUp do
+  it "runs successfully" do
+    result = MyApp::SignUp.run(:username => 'alice', :password => '123123')
+    expect(result).to be_a_success
+  end
+
+  it "fails when password is too short" do
+    result = MyApp::SignUp.run(:username => 'alice', :password => '5')
+    expect(result).to fail_with(:invalid_password)
+
+    # The above `fail_with` line is equivalent to:
+    # expect(result.value).to be_a SolidUseCase::Composable::ErrorStruct
+    # expect(result.value.type).to eq :invalid_password
+
+    # You still have access to your arbitrary error data
+    expect(result.value.something).to eq 'whatever'
   end
 end
 ```

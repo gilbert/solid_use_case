@@ -1,15 +1,9 @@
 module SolidUseCase
-  class Base
-    include Deterministic::CoreExt::Either
-    include BaseUtil
+  module Composable
 
-    def self.run(input_hash={})
-      self.new.run(input_hash)
-    end
-
-    def self.steps(*args)
-      @__steps ||= []
-      @__steps += args
+    def self.included(includer)
+      includer.send :include, Deterministic::CoreExt::Either
+      includer.extend ClassMethods
     end
 
     def run(inputs)
@@ -20,7 +14,7 @@ module SolidUseCase
       while steps.count > 0
         next_step = steps.shift
 
-        if next_step.is_a?(Class) && (next_step < SolidUseCase::Base)
+        if next_step.is_a?(Class) && (next_step.respond_to? :composable?) && next_step.composable?
           subresult = next_step.run(result.value)
         elsif next_step.is_a?(Symbol)
           subresult = self.send(next_step, result.value)

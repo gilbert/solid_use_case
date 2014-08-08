@@ -1,5 +1,5 @@
 module SolidUseCase
-  module BaseUtil
+  module Util
 
     def symbolize_names(object)
       case object

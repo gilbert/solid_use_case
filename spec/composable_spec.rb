@@ -1,9 +1,11 @@
 require 'spec_helper'
 
-describe SolidUseCase::Base do
+describe SolidUseCase::Composable do
 
   describe 'Stepping' do
-    class GiantSteps < SolidUseCase::Base
+    class GiantSteps
+      include SolidUseCase::Composable
+
       def run(inputs)
         attempt_all do
           step { step_1(inputs) }
@@ -31,7 +33,8 @@ describe SolidUseCase::Base do
 
 
   describe 'Stepping DSL' do
-    class GiantStepsDSL < SolidUseCase::Base
+    class GiantStepsDSL
+      include SolidUseCase::Composable
 
       steps :step_1, :step_2
 
@@ -59,7 +62,8 @@ describe SolidUseCase::Base do
       expect(result.value[:number]).to eq(40)
     end
 
-    class SubStep < SolidUseCase::Base
+    class SubStep
+      include SolidUseCase::Composable
       steps GiantStepsDSL, :last_step
 
       def last_step(inputs)
@@ -77,7 +81,9 @@ describe SolidUseCase::Base do
 
 
   describe 'Failure Matching' do
-    class FailureMatch < SolidUseCase::Base
+    class FailureMatch
+      include SolidUseCase::Composable
+
       def run(inputs)
         attempt_all do
           step { fail_it(inputs) }
@@ -95,7 +101,7 @@ describe SolidUseCase::Base do
       # Custom RSpec matcher
       expect(result).to_not be_a_success
 
-      expect(result.value).to be_a SolidUseCase::ErrorStruct
+      expect(result.value).to be_a SolidUseCase::Composable::ErrorStruct
       expect(result.value.type).to eq :abc
 
       matched = false

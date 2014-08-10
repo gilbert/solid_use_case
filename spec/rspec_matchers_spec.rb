@@ -49,8 +49,8 @@ describe 'Custom RSpec Matchers' do
       matcher = be_a_success
       expect(matcher.matches? ExceptionCase.run).to eq(false)
 
-      expect(matcher.failure_message_for_should).to include('oops')
-      expect(matcher.failure_message_for_should).to_not include(
+      expect(matcher.failure_message).to include('oops')
+      expect(matcher.failure_message).to_not include(
         'deterministic/either/attempt_all.rb',
         'deterministic/core_ext/either.rb',
         'lib/rspec/core/example.rb'

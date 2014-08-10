@@ -15,7 +15,7 @@ module SolidUseCase
         @result.is_a? Deterministic::Success
       end
 
-      def failure_message_for_should
+      def failure_message
         "expected result to be a success\n" +
         if @result.value.is_a? SolidUseCase::Composable::ErrorStruct
           "Error & Data:\n    #{@result.value.type} - #{@result.value.inspect}"
@@ -31,7 +31,7 @@ module SolidUseCase
         end
       end
 
-      def failure_message_for_should_not
+      def failure_message_when_negated
         "expected result to not be a success"
       end
     end
@@ -48,7 +48,7 @@ module SolidUseCase
         @is_failure && @result.value.type == @expected_error_name
       end
 
-      def failure_message_for_should
+      def failure_message
         if @is_failure
           "expected result to fail with :#{@expected_error_name} (failed with :#{@result.value.type} instead)"
         else
@@ -56,7 +56,7 @@ module SolidUseCase
         end
       end
 
-      def failure_message_for_should_not
+      def failure_message_when_negated
         if @is_failure
           "expected result to fail with an error not equal to :#{@expected_error_name}"
         else

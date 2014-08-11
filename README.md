@@ -95,6 +95,10 @@ end
 
 ## Control Flow Helpers
 
+Because we're using consistent successes and failures, we can use different functions to gain some nice control flow while avoiding those pesky if-else statements :)
+
+### #check_exists
+
 `check_exists` (alias `maybe_continue`) allows you to implicitly return a failure when a value is nil:
 
 ```ruby
@@ -117,6 +121,8 @@ find_tag(tag)
   # At this point you can safely assume you have a tag :)
 end
 ```
+
+### #attempt
 
 `attempt` allows you to catch an exception. It's useful when you want to attempt something that might fail, but don't want to write all that exception-handling boilerplate.
 

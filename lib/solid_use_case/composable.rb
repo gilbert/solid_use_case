@@ -40,6 +40,12 @@ module SolidUseCase
       end
     end
 
+    def attempt
+      attempt_all do
+        try { yield }
+      end
+    end
+
     def fail(type, data={})
       data[:type] = type
       Failure(ErrorStruct.new(data))

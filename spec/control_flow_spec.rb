@@ -3,7 +3,6 @@ require 'spec_helper'
 describe "Control Flow Helpers" do
 
   describe '#check_exists' do
-
     class FloodGate
       include SolidUseCase::Composable
 
@@ -41,6 +40,30 @@ describe "Control Flow Helpers" do
       result = FloodGate.new.custom_error(nil, :my_error)
       expect(result).to fail_with(:my_error)
     end
-
   end
+
+  describe '#attempt' do
+    class Bubble
+      include SolidUseCase::Composable
+
+      def pop1
+        attempt { "pop!" }
+      end
+
+      def pop2
+        attempt { raise NoMethodError.new("oops") }
+      end
+    end
+
+    it "succeeds when no exceptions happen" do
+      expect(Bubble.new.pop1).to be_a_success
+    end
+
+    it "catches exceptions" do
+      result = Bubble.new.pop2
+      expect(result).to_not be_a_success
+      expect(result.value).to be_a NoMethodError
+    end
+  end
+
 end

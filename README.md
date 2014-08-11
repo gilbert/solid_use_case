@@ -95,7 +95,7 @@ end
 
 ## Control Flow Helpers
 
-`check_exists` (alias `maybe_continue`) allows you to return a failure when a value is nil:
+`check_exists` (alias `maybe_continue`) allows you to implicitly return a failure when a value is nil:
 
 ```ruby
 # NOTE: The following assumes that #post_comment returns a Success or Failure
@@ -115,6 +115,22 @@ find_tag(tag)
 .or_else { create_tag(tag) }
 .and_then do |active_record_tag|
   # At this point you can safely assume you have a tag :)
+end
+```
+
+`attempt` allows you to catch an exception. It's useful when you want to attempt something that might fail, but don't want to write all that exception-handling boilerplate.
+
+`attempt` also **auto-wraps your values**; in other words, the inner code does **not** have to return a success or failure.
+
+For example, a Stripe API call:
+
+```ruby
+# Goal: Only charge customer if he/she exists
+attempt {
+  Stripe::Customer.retrieve(some_id)
+}
+.and_then do |stripe_customer|
+  stripe_customer.charge(...)
 end
 ```
 

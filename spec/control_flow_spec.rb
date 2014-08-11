@@ -4,7 +4,7 @@ describe "Control Flow Helpers" do
 
   describe '#check_exists' do
     class FloodGate
-      include SolidUseCase::Composable
+      include SolidUseCase
 
       def basic(input)
         check_exists(input).and_then {|x| Success(x * 2) }
@@ -44,7 +44,7 @@ describe "Control Flow Helpers" do
 
   describe '#attempt' do
     class Bubble
-      include SolidUseCase::Composable
+      include SolidUseCase
 
       def pop1
         attempt { "pop!" }

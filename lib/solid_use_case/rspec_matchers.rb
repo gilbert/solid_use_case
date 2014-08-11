@@ -17,7 +17,7 @@ module SolidUseCase
 
       def failure_message
         "expected result to be a success\n" +
-        if @result.value.is_a? SolidUseCase::Composable::ErrorStruct
+        if @result.value.is_a? SolidUseCase::Either::ErrorStruct
           "Error & Data:\n    #{@result.value.type} - #{@result.value.inspect}"
         elsif @result.value.is_a? Exception
           backtrace = @result.value.backtrace.reject do |file|

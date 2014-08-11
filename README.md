@@ -26,7 +26,7 @@ The only thing required is using the `#steps` method:
 
 ```ruby
 class UserSignup
-  include SolidUseCase::Composable
+  include SolidUseCase
 
   steps :validate, :save_user, :email_user
 
@@ -57,7 +57,7 @@ class UserSignup
 end
 ```
 
-Now you can run your use case in your controller and easily respond to the different outcomes (with **pattern matching**!):
+Now you can run your use case in your controller and easily respond to the different outcomes (with pattern matching!):
 
 ```ruby
 class UsersController < ApplicationController
@@ -170,7 +170,7 @@ describe MyApp::SignUp do
     expect(result).to fail_with(:invalid_password)
 
     # The above `fail_with` line is equivalent to:
-    # expect(result.value).to be_a SolidUseCase::Composable::ErrorStruct
+    # expect(result.value).to be_a SolidUseCase::Either::ErrorStruct
     # expect(result.value.type).to eq :invalid_password
 
     # You still have access to your arbitrary error data

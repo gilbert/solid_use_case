@@ -1,10 +1,5 @@
 module SolidUseCase
-  module Composable
-
-    def self.included(includer)
-      includer.send :include, Deterministic::CoreExt::Either
-      includer.extend ClassMethods
-    end
+  module Either
 
     def run(inputs)
       steps = self.class.instance_variable_get("@__steps").clone
@@ -14,7 +9,7 @@ module SolidUseCase
       while steps.count > 0
         next_step = steps.shift
 
-        if next_step.is_a?(Class) && (next_step.respond_to? :composable?) && next_step.composable?
+        if next_step.is_a?(Class) && (next_step.respond_to? :can_run_either?) && next_step.can_run_either?
           subresult = next_step.run(result.value)
         elsif next_step.is_a?(Symbol)
           subresult = self.send(next_step, result.value)
@@ -43,6 +38,16 @@ module SolidUseCase
     def attempt
       attempt_all do
         try { yield }
+      end
+    end
+
+    def catch(required, *exceptions)
+      exceptions << required
+      result = attempt_all do
+        try { yield }
+      end
+      if result.is_a?(Failure) && exceptions.any?
+        raise result.value unless exceptions.include?(result.value)
       end
     end
 

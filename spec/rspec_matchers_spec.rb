@@ -4,21 +4,21 @@ describe 'Custom RSpec Matchers' do
   include SolidUseCase::RSpecMatchers
 
   class FailCase
-    include SolidUseCase::Composable
+    include SolidUseCase
     def run(error)
       fail(error)
     end
   end
 
   class SuccessCase
-    include SolidUseCase::Composable
+    include SolidUseCase
     def run(val)
       continue(val)
     end
   end
 
   class ExceptionCase
-    include SolidUseCase::Composable
+    include SolidUseCase
     def run(val)
       attempt_all do
         try { raise_exception }

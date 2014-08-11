@@ -1,5 +1,5 @@
 module SolidUseCase
-  module Composable
+  module Either
     class ErrorStruct < OpenStruct
       def ==(error_type_symbol)
         self[:type] == error_type_symbol

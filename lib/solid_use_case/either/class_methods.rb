@@ -1,5 +1,5 @@
 module SolidUseCase
-  module Composable
+  module Either
     module ClassMethods
 
       def run(input_hash={})
@@ -11,7 +11,7 @@ module SolidUseCase
         @__steps += args
       end
 
-      def composable?
+      def can_run_either?
         true
       end
 

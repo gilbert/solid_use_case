@@ -93,6 +93,31 @@ class UsersController < ApplicationController
 end
 ```
 
+## Control Flow Helpers
+
+`check_exists` (alias `maybe_continue`) allows you to return a failure when a value is nil:
+
+```ruby
+# NOTE: The following assumes that #post_comment returns a Success or Failure
+video = Video.find_by_id(params[:video_id])
+check_exists(video).and_then { post_comment(params) }
+
+# NOTE: The following assumes that #find_tag and #create_tag both return a Success or Failure
+check_exists(Tag.find_by(name: tag)).or_else { create_tag(tag) }.and_then { ... }
+
+# If you wanted, you could refactor the above to use a method:
+def find_tag(name)
+  maybe_continue(Tag.find_by(name: name))
+end
+
+# Then, elsewhere...
+find_tag(tag)
+.or_else { create_tag(tag) }
+.and_then do |active_record_tag|
+  # At this point you can safely assume you have a tag :)
+end
+```
+
 ## RSpec Matchers
 
 If you're using RSpec, Solid Use Case provides some helpful matchers for testing.

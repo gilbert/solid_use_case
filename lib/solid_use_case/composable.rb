@@ -32,11 +32,20 @@ module SolidUseCase
     # Helpers #
     # # # # # #
 
+    def check_exists(val, error=:not_found)
+      if val.nil?
+        fail(error)
+      else
+        continue(val)
+      end
+    end
+
     def fail(type, data={})
       data[:type] = type
       Failure(ErrorStruct.new(data))
     end
 
+    alias :maybe_continue :check_exists
     alias :continue :Success
   end
 end

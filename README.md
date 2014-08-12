@@ -42,7 +42,7 @@ class UserSignup
 
   def save_user(params)
     user = params[:user]
-    if user.save
+    if !user.save
       fail :user_save_failed, :user => user
     else
       continue(params)
@@ -103,7 +103,7 @@ Because we're using consistent successes and failures, we can use different func
 
 ```ruby
 # NOTE: The following assumes that #post_comment returns a Success or Failure
-video = Video.find_by_id(params[:video_id])
+video = Video.find_by id: params[:video_id]
 check_exists(video).and_then { post_comment(params) }
 
 # NOTE: The following assumes that #find_tag and #create_tag both return a Success or Failure

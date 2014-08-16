@@ -77,6 +77,23 @@ describe SolidUseCase::Either do
       expect(result).to be_a_success
       expect(result.value).to eq(41)
     end
+
+    class ShortCircuit
+      include SolidUseCase
+      steps :first, :second
+
+      def first(inputs)
+        fail :jump_out_yo
+      end
+
+      def second(inputs)
+        throw "Should not reach this point"
+      end
+    end
+
+    it "doesn't run the next step a failure occures" do
+      expect { ShortCircuit.run }.to_not raise_error
+    end
   end
 
 

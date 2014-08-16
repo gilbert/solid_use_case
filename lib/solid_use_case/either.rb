@@ -3,24 +3,24 @@ module SolidUseCase
 
     def run(inputs)
       steps = self.class.instance_variable_get("@__steps").clone
-      result = Success(inputs)
-      return result unless steps
+      current_result = Success(inputs)
+      return current_result unless steps
 
       while steps.count > 0
         next_step = steps.shift
 
-        if next_step.is_a?(Class) && (next_step.respond_to? :can_run_either?) && next_step.can_run_either?
-          subresult = next_step.run(result.value)
-        elsif next_step.is_a?(Symbol)
-          subresult = self.send(next_step, result.value)
-        else
-          raise "Invalid step type: #{next_step.inspect}"
+        current_result = current_result.and_then do
+          if next_step.is_a?(Class) && (next_step.respond_to? :can_run_either?) && next_step.can_run_either?
+            next_step.run(current_result.value)
+          elsif next_step.is_a?(Symbol)
+            self.send(next_step, current_result.value)
+          else
+            raise "Invalid step type: #{next_step.inspect}"
+          end
         end
-
-        result = result.and(subresult)
       end
 
-      result
+      current_result
     end
 
     # # # # # #

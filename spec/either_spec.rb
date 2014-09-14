@@ -91,7 +91,7 @@ describe SolidUseCase::Either do
       end
     end
 
-    it "doesn't run the next step a failure occures" do
+    it "doesn't run the next step if a failure occures" do
       expect { ShortCircuit.run }.to_not raise_error
     end
   end

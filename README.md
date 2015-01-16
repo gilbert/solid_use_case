@@ -2,6 +2,8 @@
 
 **Solid Use Case** is a gem to help you implement well-tested and flexible use cases. Solid Use Case is not a framework - it's a **design pattern library**. This means it works *with* your app's workflow, not against it.
 
+[See the Austin on Rails presentation slides](http://library.makersquare.com/learn/fp-in-rails)
+
 ## Installation
 
 Add this line to your application's Gemfile:

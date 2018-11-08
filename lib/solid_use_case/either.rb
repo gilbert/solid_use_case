@@ -58,5 +58,14 @@ module SolidUseCase
 
     alias :maybe_continue :check_exists
     alias :continue :Success
+
+    def self.success(value)
+      Success(value)
+    end
+
+    def self.failure(type, data={})
+      data[:type] = type
+      Failure(ErrorStruct.new(data))
+    end
   end
 end

@@ -131,4 +131,19 @@ describe SolidUseCase::Either do
       expect(matched).to eq true
     end
   end
+
+  describe 'Literals' do
+    it "creates a success literal" do
+      s = SolidUseCase::Either.success(10)
+      expect(s).to be_a_success
+      expect(s.value).to eq 10
+    end
+
+    it "creates a failure literal" do
+      f = SolidUseCase::Either.failure(:mock, x: 20)
+      expect(f).to_not be_a_success
+      expect(f).to fail_with :mock
+      expect(f.value[:x]).to eq 20
+    end
+  end
 end

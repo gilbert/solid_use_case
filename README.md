@@ -8,7 +8,7 @@
 
 Add this line to your application's Gemfile:
 
-    gem 'solid_use_case', '~> 2.1.1'
+    gem 'solid_use_case', '~> 2.1.2'
 
 And then execute:
 

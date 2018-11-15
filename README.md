@@ -124,6 +124,36 @@ find_tag(tag)
 end
 ```
 
+### #check_each
+
+If you're iterating through an array where each item could fail, `#check_each` might come in handy. A key point is that `check_each` will only fail if you return a failure; You don't need to return a `continue()`.
+
+Returning a failure within a `#check_each` block will short-circuit the loop.
+
+```ruby
+def validate_score(score)
+  fail :score_out_of_range unless score.between?(0,100)
+end
+
+input = [10, 50, 104, 3]
+
+check_each(input) {|s| validate_score(s)}.and_then do |scores|
+  write_to_db_or_whatever(scores)
+end
+```
+
+If you need to continue with a value that is different from the array, you can use `continue_with:`. This is useful when you want to check a subset of your overall data.
+
+```ruby
+params = { game_id: 7, scores: [10,50] }
+
+check_each(params[:scores], continue_with: params) {|s|
+  validate_score(s)
+}.and_then {|foo|
+  # Here `foo` is the same value as `params` above
+}
+```
+
 ### #attempt
 
 `attempt` allows you to catch an exception. It's useful when you want to attempt something that might fail, but don't want to write all that exception-handling boilerplate.

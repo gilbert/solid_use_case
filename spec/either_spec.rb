@@ -132,6 +132,52 @@ describe SolidUseCase::Either do
     end
   end
 
+  describe 'Helpers' do
+    class CheckEachHelper
+      include SolidUseCase
+
+      def success_1
+        vals = [:x, :y]
+        check_each(vals) {|v| v}
+      end
+
+      def success_2
+        vals = [:x, :y]
+        check_each(vals, continue_with: 999) {|v| v}
+      end
+
+      def failure_1(goods)
+        vals = [5, 10, 0, 15]
+        check_each(vals) do |val|
+          if val != 0
+            goods.push(val)
+          else
+            fail :zero
+          end
+        end
+      end
+    end
+
+    it "checks an array" do
+      result = CheckEachHelper.new.success_1
+      expect(result).to be_a_success
+      expect(result.value).to eq([:x, :y])
+    end
+
+    it "continues with a value" do
+      result = CheckEachHelper.new.success_2
+      expect(result).to be_a_success
+      expect(result.value).to eq(999)
+    end
+
+    it "fails on first" do
+      goods = []
+      result = CheckEachHelper.new.failure_1(goods)
+      expect(result).to fail_with(:zero)
+      expect(goods).to eq([5, 10])
+    end
+  end
+
   describe 'Literals' do
     it "creates a success literal" do
       s = SolidUseCase::Either.success(10)

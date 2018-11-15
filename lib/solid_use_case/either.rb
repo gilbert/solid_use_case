@@ -35,6 +35,19 @@ module SolidUseCase
       end
     end
 
+    def check_each(array, continue_with: array)
+      failure = nil
+      array.find do |item|
+        item_result = yield(item)
+        if item_result.is_a?(Failure)
+          failure = item_result
+          true
+        end
+      end
+
+      failure || continue(continue_with)
+    end
+
     def attempt
       attempt_all do
         try { yield }
